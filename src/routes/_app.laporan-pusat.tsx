@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Scale, FileSpreadsheet, TrendingUp, PieChart, GitCompare, BookOpen } from "lucide-react";
+import { Scale, FileSpreadsheet, TrendingUp, PieChart, GitCompare, BookOpen, Activity } from "lucide-react";
 import { PageHeader } from "@/components/DashboardLayout";
 
 export const Route = createFileRoute("/_app/laporan-pusat")({
@@ -15,7 +15,8 @@ type Item = {
     | "/laporan/bagi-hasil"
     | "/laporan/rekonsiliasi-rk"
     | "/laporan/buku-besar-pusat"
-    | "/laporan/buku-besar-konsolidasi";
+    | "/laporan/buku-besar-konsolidasi"
+    | "/laporan/arus-kas-ekuitas";
   title: string;
   desc: string;
   icon: React.ReactNode;
@@ -26,6 +27,7 @@ const items: Item[] = [
   { to: "/laporan/neraca-pusat", title: "Neraca Pusat", desc: "Posisi keuangan kantor pusat BUMDes.", icon: <Scale className="h-7 w-7" />, accent: "from-amber-300 to-yellow-500" },
   { to: "/laporan/neraca-konsolidasi", title: "Neraca Konsolidasi", desc: "Gabungan posisi keuangan seluruh unit usaha.", icon: <FileSpreadsheet className="h-7 w-7" />, accent: "from-yellow-300 to-amber-500" },
   { to: "/laporan/laba-rugi", title: "Laba Rugi", desc: "Pendapatan, beban, dan laba periode berjalan.", icon: <TrendingUp className="h-7 w-7" />, accent: "from-amber-400 to-orange-400" },
+  { to: "/laporan/arus-kas-ekuitas", title: "Arus Kas & Ekuitas", desc: "Arus kas, perubahan ekuitas, dan perubahan modal.", icon: <Activity className="h-7 w-7" />, accent: "from-orange-300 to-amber-500" },
   { to: "/laporan/bagi-hasil", title: "Bagi Hasil", desc: "Distribusi laba antar unit dan pemangku kepentingan.", icon: <PieChart className="h-7 w-7" />, accent: "from-yellow-400 to-amber-600" },
   { to: "/laporan/rekonsiliasi-rk", title: "Rekonsiliasi RK", desc: "Cek kesesuaian Rekening Koran antar entitas.", icon: <GitCompare className="h-7 w-7" />, accent: "from-amber-300 to-orange-500" },
   { to: "/laporan/buku-besar-pusat", title: "Buku Besar Pusat", desc: "Mutasi akun lengkap entity Pusat dengan saldo berjalan.", icon: <BookOpen className="h-7 w-7" />, accent: "from-yellow-500 to-amber-300" },
