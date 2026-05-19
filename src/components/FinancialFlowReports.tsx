@@ -255,6 +255,12 @@ export function FinancialFlowReports({
                 accById={accById}
                 accounts={accounts ?? []}
                 filter={tab === "perubahan-modal" ? "modal" : "ekuitas"}
+                excludeIds={equityExcludeIds}
+                eliminationNote={
+                  eliminateRk && (rkAccountIds?.size ?? 0) > 0
+                    ? "Akun Rekening Koran (RK) antar-entitas dieliminasi pada tampilan Pusat / Konsolidasi."
+                    : null
+                }
               />
             )}
           </div>
