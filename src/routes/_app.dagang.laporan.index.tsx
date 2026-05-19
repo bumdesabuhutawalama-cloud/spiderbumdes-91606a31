@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Scale, GitCompare, FileBarChart, BookOpen, PieChart } from "lucide-react";
+import { Scale, GitCompare, FileBarChart, BookOpen, PieChart, Activity } from "lucide-react";
 import { PageHeader } from "@/components/DashboardLayout";
 
 export const Route = createFileRoute("/_app/dagang/laporan/")({
@@ -44,6 +44,12 @@ function LaporanDagangIndex() {
           title="Bagi Hasil Dagang"
           desc="Distribusi laba unit Dagang mengacu Master Bagi Hasil Pusat."
           icon={<PieChart className="h-5 w-5" />}
+        />
+        <Card
+          to="/dagang/laporan/arus-kas-ekuitas"
+          title="Arus Kas & Ekuitas"
+          desc="Arus kas, perubahan ekuitas, dan perubahan modal unit Dagang."
+          icon={<Activity className="h-5 w-5" />}
         />
       </div>
     </>
