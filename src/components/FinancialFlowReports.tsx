@@ -123,6 +123,24 @@ export function FinancialFlowReports({
     },
   });
 
+  // ID akun RK antar-entitas — dieliminasi dari Laporan Perubahan Ekuitas
+  // saat melihat Pusat / Konsolidasi (bukan tampilan per unit).
+  const { data: rkAccountIds } = useQuery({
+    queryKey: ["rk-account-ids"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("entity_rk_accounts")
+        .select("account_id");
+      if (error) throw error;
+      return new Set((data ?? []).map((r) => (r as { account_id: string }).account_id));
+    },
+  });
+  const eliminateRk = mode !== "unit";
+  const equityExcludeIds = useMemo(
+    () => (eliminateRk ? rkAccountIds ?? new Set<string>() : new Set<string>()),
+    [eliminateRk, rkAccountIds],
+  );
+
   // Lines pada periode (untuk arus kas + delta ekuitas)
   const { data: linesPeriod, isLoading: lp } = useQuery({
     queryKey: ["flow-lines-period", start, end, mode, unitId],
