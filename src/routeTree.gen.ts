@@ -47,6 +47,7 @@ import { Route as AppLaporanLabaRugiRouteImport } from './routes/_app.laporan.la
 import { Route as AppLaporanBukuBesarPusatRouteImport } from './routes/_app.laporan.buku-besar-pusat'
 import { Route as AppLaporanBukuBesarKonsolidasiRouteImport } from './routes/_app.laporan.buku-besar-konsolidasi'
 import { Route as AppLaporanBagiHasilRouteImport } from './routes/_app.laporan.bagi-hasil'
+import { Route as AppLaporanArusKasEkuitasRouteImport } from './routes/_app.laporan.arus-kas-ekuitas'
 import { Route as AppDagangTransferRouteImport } from './routes/_app.dagang.transfer'
 import { Route as AppDagangStokRouteImport } from './routes/_app.dagang.stok'
 import { Route as AppDagangLaporanRouteImport } from './routes/_app.dagang.laporan'
@@ -62,6 +63,7 @@ import { Route as AppUspLaporanNeracaRouteImport } from './routes/_app.usp.lapor
 import { Route as AppUspLaporanLabaRugiRouteImport } from './routes/_app.usp.laporan.laba-rugi'
 import { Route as AppUspLaporanBukuBesarRouteImport } from './routes/_app.usp.laporan.buku-besar'
 import { Route as AppUspLaporanBagiHasilRouteImport } from './routes/_app.usp.laporan.bagi-hasil'
+import { Route as AppUspLaporanArusKasEkuitasRouteImport } from './routes/_app.usp.laporan.arus-kas-ekuitas'
 import { Route as AppUspKegiatanPenyertaanModalRouteImport } from './routes/_app.usp.kegiatan.penyertaan-modal'
 import { Route as AppUspKegiatanPengeluaranRouteImport } from './routes/_app.usp.kegiatan.pengeluaran'
 import { Route as AppUspKegiatanPenerimaanKasRouteImport } from './routes/_app.usp.kegiatan.penerimaan-kas'
@@ -75,6 +77,7 @@ import { Route as AppDagangLaporanNeracaRouteImport } from './routes/_app.dagang
 import { Route as AppDagangLaporanLabaRugiRouteImport } from './routes/_app.dagang.laporan.laba-rugi'
 import { Route as AppDagangLaporanBukuBesarRouteImport } from './routes/_app.dagang.laporan.buku-besar'
 import { Route as AppDagangLaporanBagiHasilRouteImport } from './routes/_app.dagang.laporan.bagi-hasil'
+import { Route as AppDagangLaporanArusKasEkuitasRouteImport } from './routes/_app.dagang.laporan.arus-kas-ekuitas'
 import { Route as AppDagangKegiatanPenjualanTunaiRouteImport } from './routes/_app.dagang.kegiatan.penjualan-tunai'
 import { Route as AppDagangKegiatanPenjualanKreditRouteImport } from './routes/_app.dagang.kegiatan.penjualan-kredit'
 import { Route as AppDagangKegiatanPengeluaranRouteImport } from './routes/_app.dagang.kegiatan.pengeluaran'
@@ -278,6 +281,12 @@ const AppLaporanBagiHasilRoute = AppLaporanBagiHasilRouteImport.update({
   path: '/laporan/bagi-hasil',
   getParentRoute: () => AppRoute,
 } as any)
+const AppLaporanArusKasEkuitasRoute =
+  AppLaporanArusKasEkuitasRouteImport.update({
+    id: '/laporan/arus-kas-ekuitas',
+    path: '/laporan/arus-kas-ekuitas',
+    getParentRoute: () => AppRoute,
+  } as any)
 const AppDagangTransferRoute = AppDagangTransferRouteImport.update({
   id: '/transfer',
   path: '/transfer',
@@ -354,6 +363,12 @@ const AppUspLaporanBagiHasilRoute = AppUspLaporanBagiHasilRouteImport.update({
   path: '/bagi-hasil',
   getParentRoute: () => AppUspLaporanRoute,
 } as any)
+const AppUspLaporanArusKasEkuitasRoute =
+  AppUspLaporanArusKasEkuitasRouteImport.update({
+    id: '/arus-kas-ekuitas',
+    path: '/arus-kas-ekuitas',
+    getParentRoute: () => AppUspLaporanRoute,
+  } as any)
 const AppUspKegiatanPenyertaanModalRoute =
   AppUspKegiatanPenyertaanModalRouteImport.update({
     id: '/penyertaan-modal',
@@ -425,6 +440,12 @@ const AppDagangLaporanBagiHasilRoute =
   AppDagangLaporanBagiHasilRouteImport.update({
     id: '/bagi-hasil',
     path: '/bagi-hasil',
+    getParentRoute: () => AppDagangLaporanRoute,
+  } as any)
+const AppDagangLaporanArusKasEkuitasRoute =
+  AppDagangLaporanArusKasEkuitasRouteImport.update({
+    id: '/arus-kas-ekuitas',
+    path: '/arus-kas-ekuitas',
     getParentRoute: () => AppDagangLaporanRoute,
   } as any)
 const AppDagangKegiatanPenjualanTunaiRoute =
@@ -511,6 +532,7 @@ export interface FileRoutesByFullPath {
   '/dagang/laporan': typeof AppDagangLaporanRouteWithChildren
   '/dagang/stok': typeof AppDagangStokRoute
   '/dagang/transfer': typeof AppDagangTransferRoute
+  '/laporan/arus-kas-ekuitas': typeof AppLaporanArusKasEkuitasRoute
   '/laporan/bagi-hasil': typeof AppLaporanBagiHasilRoute
   '/laporan/buku-besar-konsolidasi': typeof AppLaporanBukuBesarKonsolidasiRoute
   '/laporan/buku-besar-pusat': typeof AppLaporanBukuBesarPusatRoute
@@ -540,6 +562,7 @@ export interface FileRoutesByFullPath {
   '/dagang/kegiatan/pengeluaran': typeof AppDagangKegiatanPengeluaranRoute
   '/dagang/kegiatan/penjualan-kredit': typeof AppDagangKegiatanPenjualanKreditRoute
   '/dagang/kegiatan/penjualan-tunai': typeof AppDagangKegiatanPenjualanTunaiRoute
+  '/dagang/laporan/arus-kas-ekuitas': typeof AppDagangLaporanArusKasEkuitasRoute
   '/dagang/laporan/bagi-hasil': typeof AppDagangLaporanBagiHasilRoute
   '/dagang/laporan/buku-besar': typeof AppDagangLaporanBukuBesarRoute
   '/dagang/laporan/laba-rugi': typeof AppDagangLaporanLabaRugiRoute
@@ -553,6 +576,7 @@ export interface FileRoutesByFullPath {
   '/usp/kegiatan/penerimaan-kas': typeof AppUspKegiatanPenerimaanKasRoute
   '/usp/kegiatan/pengeluaran': typeof AppUspKegiatanPengeluaranRoute
   '/usp/kegiatan/penyertaan-modal': typeof AppUspKegiatanPenyertaanModalRoute
+  '/usp/laporan/arus-kas-ekuitas': typeof AppUspLaporanArusKasEkuitasRoute
   '/usp/laporan/bagi-hasil': typeof AppUspLaporanBagiHasilRoute
   '/usp/laporan/buku-besar': typeof AppUspLaporanBukuBesarRoute
   '/usp/laporan/laba-rugi': typeof AppUspLaporanLabaRugiRoute
@@ -582,6 +606,7 @@ export interface FileRoutesByTo {
   '/dagang/jurnal-koreksi': typeof AppDagangJurnalKoreksiRoute
   '/dagang/stok': typeof AppDagangStokRoute
   '/dagang/transfer': typeof AppDagangTransferRoute
+  '/laporan/arus-kas-ekuitas': typeof AppLaporanArusKasEkuitasRoute
   '/laporan/bagi-hasil': typeof AppLaporanBagiHasilRoute
   '/laporan/buku-besar-konsolidasi': typeof AppLaporanBukuBesarKonsolidasiRoute
   '/laporan/buku-besar-pusat': typeof AppLaporanBukuBesarPusatRoute
@@ -609,6 +634,7 @@ export interface FileRoutesByTo {
   '/dagang/kegiatan/pengeluaran': typeof AppDagangKegiatanPengeluaranRoute
   '/dagang/kegiatan/penjualan-kredit': typeof AppDagangKegiatanPenjualanKreditRoute
   '/dagang/kegiatan/penjualan-tunai': typeof AppDagangKegiatanPenjualanTunaiRoute
+  '/dagang/laporan/arus-kas-ekuitas': typeof AppDagangLaporanArusKasEkuitasRoute
   '/dagang/laporan/bagi-hasil': typeof AppDagangLaporanBagiHasilRoute
   '/dagang/laporan/buku-besar': typeof AppDagangLaporanBukuBesarRoute
   '/dagang/laporan/laba-rugi': typeof AppDagangLaporanLabaRugiRoute
@@ -622,6 +648,7 @@ export interface FileRoutesByTo {
   '/usp/kegiatan/penerimaan-kas': typeof AppUspKegiatanPenerimaanKasRoute
   '/usp/kegiatan/pengeluaran': typeof AppUspKegiatanPengeluaranRoute
   '/usp/kegiatan/penyertaan-modal': typeof AppUspKegiatanPenyertaanModalRoute
+  '/usp/laporan/arus-kas-ekuitas': typeof AppUspLaporanArusKasEkuitasRoute
   '/usp/laporan/bagi-hasil': typeof AppUspLaporanBagiHasilRoute
   '/usp/laporan/buku-besar': typeof AppUspLaporanBukuBesarRoute
   '/usp/laporan/laba-rugi': typeof AppUspLaporanLabaRugiRoute
@@ -659,6 +686,7 @@ export interface FileRoutesById {
   '/_app/dagang/laporan': typeof AppDagangLaporanRouteWithChildren
   '/_app/dagang/stok': typeof AppDagangStokRoute
   '/_app/dagang/transfer': typeof AppDagangTransferRoute
+  '/_app/laporan/arus-kas-ekuitas': typeof AppLaporanArusKasEkuitasRoute
   '/_app/laporan/bagi-hasil': typeof AppLaporanBagiHasilRoute
   '/_app/laporan/buku-besar-konsolidasi': typeof AppLaporanBukuBesarKonsolidasiRoute
   '/_app/laporan/buku-besar-pusat': typeof AppLaporanBukuBesarPusatRoute
@@ -688,6 +716,7 @@ export interface FileRoutesById {
   '/_app/dagang/kegiatan/pengeluaran': typeof AppDagangKegiatanPengeluaranRoute
   '/_app/dagang/kegiatan/penjualan-kredit': typeof AppDagangKegiatanPenjualanKreditRoute
   '/_app/dagang/kegiatan/penjualan-tunai': typeof AppDagangKegiatanPenjualanTunaiRoute
+  '/_app/dagang/laporan/arus-kas-ekuitas': typeof AppDagangLaporanArusKasEkuitasRoute
   '/_app/dagang/laporan/bagi-hasil': typeof AppDagangLaporanBagiHasilRoute
   '/_app/dagang/laporan/buku-besar': typeof AppDagangLaporanBukuBesarRoute
   '/_app/dagang/laporan/laba-rugi': typeof AppDagangLaporanLabaRugiRoute
@@ -701,6 +730,7 @@ export interface FileRoutesById {
   '/_app/usp/kegiatan/penerimaan-kas': typeof AppUspKegiatanPenerimaanKasRoute
   '/_app/usp/kegiatan/pengeluaran': typeof AppUspKegiatanPengeluaranRoute
   '/_app/usp/kegiatan/penyertaan-modal': typeof AppUspKegiatanPenyertaanModalRoute
+  '/_app/usp/laporan/arus-kas-ekuitas': typeof AppUspLaporanArusKasEkuitasRoute
   '/_app/usp/laporan/bagi-hasil': typeof AppUspLaporanBagiHasilRoute
   '/_app/usp/laporan/buku-besar': typeof AppUspLaporanBukuBesarRoute
   '/_app/usp/laporan/laba-rugi': typeof AppUspLaporanLabaRugiRoute
@@ -737,6 +767,7 @@ export interface FileRouteTypes {
     | '/dagang/laporan'
     | '/dagang/stok'
     | '/dagang/transfer'
+    | '/laporan/arus-kas-ekuitas'
     | '/laporan/bagi-hasil'
     | '/laporan/buku-besar-konsolidasi'
     | '/laporan/buku-besar-pusat'
@@ -766,6 +797,7 @@ export interface FileRouteTypes {
     | '/dagang/kegiatan/pengeluaran'
     | '/dagang/kegiatan/penjualan-kredit'
     | '/dagang/kegiatan/penjualan-tunai'
+    | '/dagang/laporan/arus-kas-ekuitas'
     | '/dagang/laporan/bagi-hasil'
     | '/dagang/laporan/buku-besar'
     | '/dagang/laporan/laba-rugi'
@@ -779,6 +811,7 @@ export interface FileRouteTypes {
     | '/usp/kegiatan/penerimaan-kas'
     | '/usp/kegiatan/pengeluaran'
     | '/usp/kegiatan/penyertaan-modal'
+    | '/usp/laporan/arus-kas-ekuitas'
     | '/usp/laporan/bagi-hasil'
     | '/usp/laporan/buku-besar'
     | '/usp/laporan/laba-rugi'
@@ -808,6 +841,7 @@ export interface FileRouteTypes {
     | '/dagang/jurnal-koreksi'
     | '/dagang/stok'
     | '/dagang/transfer'
+    | '/laporan/arus-kas-ekuitas'
     | '/laporan/bagi-hasil'
     | '/laporan/buku-besar-konsolidasi'
     | '/laporan/buku-besar-pusat'
@@ -835,6 +869,7 @@ export interface FileRouteTypes {
     | '/dagang/kegiatan/pengeluaran'
     | '/dagang/kegiatan/penjualan-kredit'
     | '/dagang/kegiatan/penjualan-tunai'
+    | '/dagang/laporan/arus-kas-ekuitas'
     | '/dagang/laporan/bagi-hasil'
     | '/dagang/laporan/buku-besar'
     | '/dagang/laporan/laba-rugi'
@@ -848,6 +883,7 @@ export interface FileRouteTypes {
     | '/usp/kegiatan/penerimaan-kas'
     | '/usp/kegiatan/pengeluaran'
     | '/usp/kegiatan/penyertaan-modal'
+    | '/usp/laporan/arus-kas-ekuitas'
     | '/usp/laporan/bagi-hasil'
     | '/usp/laporan/buku-besar'
     | '/usp/laporan/laba-rugi'
@@ -884,6 +920,7 @@ export interface FileRouteTypes {
     | '/_app/dagang/laporan'
     | '/_app/dagang/stok'
     | '/_app/dagang/transfer'
+    | '/_app/laporan/arus-kas-ekuitas'
     | '/_app/laporan/bagi-hasil'
     | '/_app/laporan/buku-besar-konsolidasi'
     | '/_app/laporan/buku-besar-pusat'
@@ -913,6 +950,7 @@ export interface FileRouteTypes {
     | '/_app/dagang/kegiatan/pengeluaran'
     | '/_app/dagang/kegiatan/penjualan-kredit'
     | '/_app/dagang/kegiatan/penjualan-tunai'
+    | '/_app/dagang/laporan/arus-kas-ekuitas'
     | '/_app/dagang/laporan/bagi-hasil'
     | '/_app/dagang/laporan/buku-besar'
     | '/_app/dagang/laporan/laba-rugi'
@@ -926,6 +964,7 @@ export interface FileRouteTypes {
     | '/_app/usp/kegiatan/penerimaan-kas'
     | '/_app/usp/kegiatan/pengeluaran'
     | '/_app/usp/kegiatan/penyertaan-modal'
+    | '/_app/usp/laporan/arus-kas-ekuitas'
     | '/_app/usp/laporan/bagi-hasil'
     | '/_app/usp/laporan/buku-besar'
     | '/_app/usp/laporan/laba-rugi'
@@ -1211,6 +1250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLaporanBagiHasilRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/laporan/arus-kas-ekuitas': {
+      id: '/_app/laporan/arus-kas-ekuitas'
+      path: '/laporan/arus-kas-ekuitas'
+      fullPath: '/laporan/arus-kas-ekuitas'
+      preLoaderRoute: typeof AppLaporanArusKasEkuitasRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/dagang/transfer': {
       id: '/_app/dagang/transfer'
       path: '/transfer'
@@ -1316,6 +1362,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppUspLaporanBagiHasilRouteImport
       parentRoute: typeof AppUspLaporanRoute
     }
+    '/_app/usp/laporan/arus-kas-ekuitas': {
+      id: '/_app/usp/laporan/arus-kas-ekuitas'
+      path: '/arus-kas-ekuitas'
+      fullPath: '/usp/laporan/arus-kas-ekuitas'
+      preLoaderRoute: typeof AppUspLaporanArusKasEkuitasRouteImport
+      parentRoute: typeof AppUspLaporanRoute
+    }
     '/_app/usp/kegiatan/penyertaan-modal': {
       id: '/_app/usp/kegiatan/penyertaan-modal'
       path: '/penyertaan-modal'
@@ -1405,6 +1458,13 @@ declare module '@tanstack/react-router' {
       path: '/bagi-hasil'
       fullPath: '/dagang/laporan/bagi-hasil'
       preLoaderRoute: typeof AppDagangLaporanBagiHasilRouteImport
+      parentRoute: typeof AppDagangLaporanRoute
+    }
+    '/_app/dagang/laporan/arus-kas-ekuitas': {
+      id: '/_app/dagang/laporan/arus-kas-ekuitas'
+      path: '/arus-kas-ekuitas'
+      fullPath: '/dagang/laporan/arus-kas-ekuitas'
+      preLoaderRoute: typeof AppDagangLaporanArusKasEkuitasRouteImport
       parentRoute: typeof AppDagangLaporanRoute
     }
     '/_app/dagang/kegiatan/penjualan-tunai': {
@@ -1513,6 +1573,7 @@ const AppDagangKegiatanRouteWithChildren =
   AppDagangKegiatanRoute._addFileChildren(AppDagangKegiatanRouteChildren)
 
 interface AppDagangLaporanRouteChildren {
+  AppDagangLaporanArusKasEkuitasRoute: typeof AppDagangLaporanArusKasEkuitasRoute
   AppDagangLaporanBagiHasilRoute: typeof AppDagangLaporanBagiHasilRoute
   AppDagangLaporanBukuBesarRoute: typeof AppDagangLaporanBukuBesarRoute
   AppDagangLaporanLabaRugiRoute: typeof AppDagangLaporanLabaRugiRoute
@@ -1522,6 +1583,7 @@ interface AppDagangLaporanRouteChildren {
 }
 
 const AppDagangLaporanRouteChildren: AppDagangLaporanRouteChildren = {
+  AppDagangLaporanArusKasEkuitasRoute: AppDagangLaporanArusKasEkuitasRoute,
   AppDagangLaporanBagiHasilRoute: AppDagangLaporanBagiHasilRoute,
   AppDagangLaporanBukuBesarRoute: AppDagangLaporanBukuBesarRoute,
   AppDagangLaporanLabaRugiRoute: AppDagangLaporanLabaRugiRoute,
@@ -1602,6 +1664,7 @@ const AppUspKegiatanRouteWithChildren = AppUspKegiatanRoute._addFileChildren(
 )
 
 interface AppUspLaporanRouteChildren {
+  AppUspLaporanArusKasEkuitasRoute: typeof AppUspLaporanArusKasEkuitasRoute
   AppUspLaporanBagiHasilRoute: typeof AppUspLaporanBagiHasilRoute
   AppUspLaporanBukuBesarRoute: typeof AppUspLaporanBukuBesarRoute
   AppUspLaporanLabaRugiRoute: typeof AppUspLaporanLabaRugiRoute
@@ -1611,6 +1674,7 @@ interface AppUspLaporanRouteChildren {
 }
 
 const AppUspLaporanRouteChildren: AppUspLaporanRouteChildren = {
+  AppUspLaporanArusKasEkuitasRoute: AppUspLaporanArusKasEkuitasRoute,
   AppUspLaporanBagiHasilRoute: AppUspLaporanBagiHasilRoute,
   AppUspLaporanBukuBesarRoute: AppUspLaporanBukuBesarRoute,
   AppUspLaporanLabaRugiRoute: AppUspLaporanLabaRugiRoute,
@@ -1657,6 +1721,7 @@ interface AppRouteChildren {
   AppPengaturanRoute: typeof AppPengaturanRouteWithChildren
   AppTransferAntarEntitasRoute: typeof AppTransferAntarEntitasRoute
   AppUspRoute: typeof AppUspRouteWithChildren
+  AppLaporanArusKasEkuitasRoute: typeof AppLaporanArusKasEkuitasRoute
   AppLaporanBagiHasilRoute: typeof AppLaporanBagiHasilRoute
   AppLaporanBukuBesarKonsolidasiRoute: typeof AppLaporanBukuBesarKonsolidasiRoute
   AppLaporanBukuBesarPusatRoute: typeof AppLaporanBukuBesarPusatRoute
@@ -1678,6 +1743,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppPengaturanRoute: AppPengaturanRouteWithChildren,
   AppTransferAntarEntitasRoute: AppTransferAntarEntitasRoute,
   AppUspRoute: AppUspRouteWithChildren,
+  AppLaporanArusKasEkuitasRoute: AppLaporanArusKasEkuitasRoute,
   AppLaporanBagiHasilRoute: AppLaporanBagiHasilRoute,
   AppLaporanBukuBesarKonsolidasiRoute: AppLaporanBukuBesarKonsolidasiRoute,
   AppLaporanBukuBesarPusatRoute: AppLaporanBukuBesarPusatRoute,
