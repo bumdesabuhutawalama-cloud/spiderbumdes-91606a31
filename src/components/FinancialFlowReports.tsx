@@ -551,5 +551,6 @@ function EquityChangeTable({
         </tr>
       </tbody>
     </table>
+    </>
   );
 }
