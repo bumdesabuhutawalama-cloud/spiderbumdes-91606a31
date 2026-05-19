@@ -434,12 +434,16 @@ function EquityChangeTable({
   accById,
   accounts,
   filter,
+  excludeIds,
+  eliminationNote,
 }: {
   lines: LineRow[];
   opening: LineRow[];
   accById: Map<string, AccountLite>;
   accounts: AccountLite[];
   filter: "ekuitas" | "modal";
+  excludeIds?: Set<string>;
+  eliminationNote?: string | null;
 }) {
   const equityAccounts = useMemo(
     () =>
@@ -447,9 +451,10 @@ function EquityChangeTable({
         (a) =>
           a.type === "EKUITAS" &&
           a.entry_type !== "Header" &&
+          !(excludeIds?.has(a.id) ?? false) &&
           (filter === "ekuitas" || isModalCode(a.code)),
       ),
-    [accounts, filter],
+    [accounts, filter, excludeIds],
   );
 
   const aggregate = (rows: LineRow[]) => {
