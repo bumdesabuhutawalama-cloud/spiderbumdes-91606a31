@@ -123,6 +123,24 @@ export function FinancialFlowReports({
     },
   });
 
+  // ID akun RK antar-entitas — dieliminasi dari Laporan Perubahan Ekuitas
+  // saat melihat Pusat / Konsolidasi (bukan tampilan per unit).
+  const { data: rkAccountIds } = useQuery({
+    queryKey: ["rk-account-ids"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("entity_rk_accounts")
+        .select("account_id");
+      if (error) throw error;
+      return new Set((data ?? []).map((r) => (r as { account_id: string }).account_id));
+    },
+  });
+  const eliminateRk = mode !== "unit";
+  const equityExcludeIds = useMemo(
+    () => (eliminateRk ? rkAccountIds ?? new Set<string>() : new Set<string>()),
+    [eliminateRk, rkAccountIds],
+  );
+
   // Lines pada periode (untuk arus kas + delta ekuitas)
   const { data: linesPeriod, isLoading: lp } = useQuery({
     queryKey: ["flow-lines-period", start, end, mode, unitId],
@@ -237,6 +255,12 @@ export function FinancialFlowReports({
                 accById={accById}
                 accounts={accounts ?? []}
                 filter={tab === "perubahan-modal" ? "modal" : "ekuitas"}
+                excludeIds={equityExcludeIds}
+                eliminationNote={
+                  eliminateRk && (rkAccountIds?.size ?? 0) > 0
+                    ? "Akun Rekening Koran (RK) antar-entitas dieliminasi pada tampilan Pusat / Konsolidasi."
+                    : null
+                }
               />
             )}
           </div>
@@ -410,12 +434,16 @@ function EquityChangeTable({
   accById,
   accounts,
   filter,
+  excludeIds,
+  eliminationNote,
 }: {
   lines: LineRow[];
   opening: LineRow[];
   accById: Map<string, AccountLite>;
   accounts: AccountLite[];
   filter: "ekuitas" | "modal";
+  excludeIds?: Set<string>;
+  eliminationNote?: string | null;
 }) {
   const equityAccounts = useMemo(
     () =>
@@ -423,9 +451,10 @@ function EquityChangeTable({
         (a) =>
           a.type === "EKUITAS" &&
           a.entry_type !== "Header" &&
+          !(excludeIds?.has(a.id) ?? false) &&
           (filter === "ekuitas" || isModalCode(a.code)),
       ),
-    [accounts, filter],
+    [accounts, filter, excludeIds],
   );
 
   const aggregate = (rows: LineRow[]) => {
@@ -487,7 +516,11 @@ function EquityChangeTable({
   const filtered = rows.filter(Boolean);
 
   return (
-    <table className="w-full border-collapse text-[12px]">
+    <>
+      {eliminationNote && (
+        <p className="mb-2 text-[11px] italic text-slate-500">{eliminationNote}</p>
+      )}
+      <table className="w-full border-collapse text-[12px]">
       <thead>
         <tr className="border-y-2 border-slate-900 text-slate-900 font-semibold">
           <th className="text-left py-1.5 px-2">Akun</th>
@@ -518,5 +551,6 @@ function EquityChangeTable({
         </tr>
       </tbody>
     </table>
+    </>
   );
 }
