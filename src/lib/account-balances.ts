@@ -39,7 +39,7 @@ export type UnitMode = "pusat" | "unit" | "konsolidasi";
  * sampai tanggal tertentu. Tabel `account_balances` tidak digunakan karena
  * pernah mengalami drift; jurnal adalah satu-satunya truth source.
  */
-async function fetchUnitJournalIds(unitId: string): Promise<string[]> {
+export async function fetchUnitJournalIds(unitId: string): Promise<string[]> {
   // Akun "milik" unit: kas_account_id pada units + akun RK yang owner-nya unit ini.
   const [{ data: unit }, { data: rk }, { data: faHist }] = await Promise.all([
     supabase.from("units").select("kas_account_id,code").eq("id", unitId).maybeSingle(),
