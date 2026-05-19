@@ -516,7 +516,11 @@ function EquityChangeTable({
   const filtered = rows.filter(Boolean);
 
   return (
-    <table className="w-full border-collapse text-[12px]">
+    <>
+      {eliminationNote && (
+        <p className="mb-2 text-[11px] italic text-slate-500">{eliminationNote}</p>
+      )}
+      <table className="w-full border-collapse text-[12px]">
       <thead>
         <tr className="border-y-2 border-slate-900 text-slate-900 font-semibold">
           <th className="text-left py-1.5 px-2">Akun</th>
