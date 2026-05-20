@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ClipboardList, TrendingUp, Wallet, Package, ArrowLeftRight } from "lucide-react";
+import { ClipboardList, TrendingUp, Wallet, Package, ArrowLeftRight, PieChart } from "lucide-react";
 import { PageHeader } from "@/components/DashboardLayout";
 
 export const Route = createFileRoute("/_app/pusat/kegiatan")({
@@ -13,7 +13,8 @@ type CardItem = {
     | "/usp/kegiatan/belanja-aset"
     | "/usp/kegiatan/penerimaan-kas"
     | "/usp/kegiatan/pengeluaran"
-    | "/usp/transfer";
+    | "/usp/transfer"
+    | "/laporan/bagi-hasil";
   icon: React.ReactNode;
   title: string;
   description: string;
@@ -26,6 +27,7 @@ const items: CardItem[] = [
   { to: "/usp/kegiatan/penerimaan-kas", icon: <Wallet className="h-6 w-6" />, title: "Penerimaan Kas Pusat", description: "Catat pemasukan kas operasional Pusat (sewa, jasa, dsb).", accent: "from-fuchsia-400 to-[var(--neon-cyan)]" },
   { to: "/usp/kegiatan/pengeluaran", icon: <ClipboardList className="h-6 w-6" />, title: "Pengeluaran Operasional", description: "Catat biaya administrasi & operasional Pusat.", accent: "from-amber-400 to-rose-400" },
   { to: "/usp/transfer", icon: <ArrowLeftRight className="h-6 w-6" />, title: "Transfer Antar Entitas", description: "Transfer dana / penyertaan ke unit usaha (USP, Dagang, dsb) via mekanisme RK.", accent: "from-sky-400 to-violet-400" },
+  { to: "/laporan/bagi-hasil", icon: <PieChart className="h-6 w-6" />, title: "Bagi Hasil", description: "Tetapkan dan bayar distribusi laba antar unit & pemangku kepentingan Pusat.", accent: "from-yellow-400 to-amber-600" },
 ];
 
 function CatatKegiatanPusatPage() {
