@@ -224,8 +224,6 @@ function PinjamanPage() {
                   <td colSpan={4}></td>
                 </tr>
               </tfoot>
-
-              </tbody>
             </table>
           </div>
         )}
