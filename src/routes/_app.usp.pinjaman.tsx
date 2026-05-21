@@ -39,6 +39,9 @@ type Installment = {
 
 function PinjamanPage() {
   const [selected, setSelected] = useState<Loan | null>(null);
+  const [fromDate, setFromDate] = useState<string>("");
+  const [toDate, setToDate] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
 
   const { data: loans, isLoading } = useQuery({
     queryKey: ["loans", "all"],
@@ -46,11 +49,59 @@ function PinjamanPage() {
       const { data, error } = await supabase
         .from("loans")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("start_date", { ascending: false });
       if (error) throw error;
       return data as Loan[];
     },
   });
+
+  const filteredLoans = useMemo(() => {
+    return (loans ?? []).filter((l) => {
+      if (fromDate && l.start_date < fromDate) return false;
+      if (toDate && l.start_date > toDate) return false;
+      if (statusFilter !== "all" && l.status !== statusFilter) return false;
+      return true;
+    });
+  }, [loans, fromDate, toDate, statusFilter]);
+
+  const summaryTotals = useMemo(() => {
+    return filteredLoans.reduce(
+      (acc, l) => {
+        acc.principal += Number(l.principal_amount);
+        acc.outstanding += Number(l.outstanding_principal);
+        return acc;
+      },
+      { principal: 0, outstanding: 0 },
+    );
+  }, [filteredLoans]);
+
+  const setQuickRange = (mode: "thisMonth" | "thisYear" | "lastYear" | "clear") => {
+    const now = new Date();
+    if (mode === "clear") {
+      setFromDate("");
+      setToDate("");
+      return;
+    }
+    if (mode === "thisMonth") {
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, "0");
+      const last = new Date(y, now.getMonth() + 1, 0).getDate();
+      setFromDate(`${y}-${m}-01`);
+      setToDate(`${y}-${m}-${String(last).padStart(2, "0")}`);
+      return;
+    }
+    if (mode === "thisYear") {
+      const y = now.getFullYear();
+      setFromDate(`${y}-01-01`);
+      setToDate(`${y}-12-31`);
+      return;
+    }
+    if (mode === "lastYear") {
+      const y = now.getFullYear() - 1;
+      setFromDate(`${y}-01-01`);
+      setToDate(`${y}-12-31`);
+    }
+  };
 
   const { data: nextDueMap } = useQuery({
     queryKey: ["loans", "next_due_map"],
