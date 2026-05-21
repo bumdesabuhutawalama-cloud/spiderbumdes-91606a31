@@ -138,18 +138,36 @@ function PinjamanPage() {
       <PageHeader title="Data Pinjaman" subtitle="Daftar pinjaman aktif & lunas, jadwal angsuran, riwayat pembayaran." />
       
 
-      <div className="glass-card rounded-2xl p-4 sm:p-5">
+      <div ref={reportRef} className="glass-card rounded-2xl p-4 sm:p-5">
+        <div className="pdf-report-header hidden print:block" data-pdf-hide="false">
+          <h2 className="text-lg font-semibold">Data Pinjaman USP</h2>
+          <p className="text-xs text-muted-foreground">
+            Periode: {fromDate || "Semua"} s.d. {toDate || "Semua"} · Status: {statusFilter === "all" ? "Semua" : statusFilter}
+          </p>
+        </div>
         <div className="flex items-center justify-between gap-2 mb-3 text-sm font-semibold">
           <div className="flex items-center gap-2">
             <ListChecks className="h-4 w-4 text-[var(--neon-cyan)]" />
             Registry Pinjaman
           </div>
-          <div className="text-[11px] font-normal text-muted-foreground">
-            {filteredLoans.length} dari {loans?.length ?? 0} pinjaman
+          <div className="flex items-center gap-3">
+            <div className="text-[11px] font-normal text-muted-foreground">
+              {filteredLoans.length} dari {loans?.length ?? 0} pinjaman
+            </div>
+            <button
+              type="button"
+              onClick={handleExportPdf}
+              disabled={exporting || !filteredLoans.length}
+              data-pdf-hide="true"
+              className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-background/40 px-2.5 py-1 text-[11px] hover:bg-white/5 disabled:opacity-50"
+            >
+              <FileDown className="h-3.5 w-3.5" />
+              {exporting ? "Mengekspor…" : "Export PDF"}
+            </button>
           </div>
         </div>
 
-        <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 items-end">
+        <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 items-end" data-pdf-hide="true">
           <div>
             <label className="block text-[11px] uppercase tracking-wide text-muted-foreground mb-1">Dari Tanggal</label>
             <input
@@ -188,6 +206,13 @@ function PinjamanPage() {
           </div>
         </div>
 
+        <div className="mb-2 text-[11px] text-muted-foreground">
+          Menampilkan <span className="font-semibold text-foreground">{filteredLoans.length}</span> pinjaman
+          {fromDate || toDate ? (
+            <> · Periode <span className="text-foreground">{fromDate || "…"}</span> s.d. <span className="text-foreground">{toDate || "…"}</span></>
+          ) : null}
+        </div>
+
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Memuat…</p>
         ) : !filteredLoans.length ? (
@@ -197,23 +222,25 @@ function PinjamanPage() {
             <table className="w-full text-sm">
               <thead className="text-[11px] uppercase text-muted-foreground">
                 <tr>
-                  <th className="text-left py-2">Tgl Mulai</th>
+                  <th className="text-left py-2 w-10">No</th>
+                  <th className="text-left">Tgl Mulai</th>
                   <th className="text-left">Peminjam</th>
                   <th className="text-right">Pokok</th>
                   <th className="text-right">Outstanding</th>
                   <th className="text-right">Angsuran/bln</th>
                   <th className="text-center">Status</th>
                   <th className="text-left">Jatuh Tempo Berikut</th>
-                  <th></th>
+                  <th data-pdf-hide="true"></th>
                 </tr>
               </thead>
               <tbody>
-                {filteredLoans.map((l) => (
+                {filteredLoans.map((l, idx) => (
                   <tr
                     key={l.id}
                     className="border-t border-white/5 hover:bg-white/5 cursor-pointer"
                     onClick={() => setSelected(l)}
                   >
+                    <td className="py-2 text-muted-foreground">{idx + 1}</td>
                     <td className="py-2 text-muted-foreground">{l.start_date}</td>
                     <td>{l.borrower_name}</td>
                     <td className="text-right font-mono">{formatRp(Number(l.principal_amount))}</td>
@@ -225,13 +252,13 @@ function PinjamanPage() {
                       </span>
                     </td>
                     <td className="text-muted-foreground">{nextDueMap?.get(l.id) ?? "—"}</td>
-                    <td className="text-right"><ChevronRight className="h-4 w-4 inline text-muted-foreground" /></td>
+                    <td className="text-right" data-pdf-hide="true"><ChevronRight className="h-4 w-4 inline text-muted-foreground" /></td>
                   </tr>
                 ))}
               </tbody>
               <tfoot>
-                <tr className="border-t border-white/10 text-[11px] uppercase text-muted-foreground">
-                  <td colSpan={2} className="py-2 text-right">Total</td>
+                <tr className="border-t border-white/10 text-[11px] uppercase text-muted-foreground pdf-total-row">
+                  <td colSpan={3} className="py-2 text-right">Total ({filteredLoans.length} pinjaman)</td>
                   <td className="text-right font-mono text-foreground">{formatRp(summaryTotals.principal)}</td>
                   <td className="text-right font-mono text-foreground">{formatRp(summaryTotals.outstanding)}</td>
                   <td colSpan={4}></td>
