@@ -39,6 +39,9 @@ type Installment = {
 
 function PinjamanPage() {
   const [selected, setSelected] = useState<Loan | null>(null);
+  const [fromDate, setFromDate] = useState<string>("");
+  const [toDate, setToDate] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
 
   const { data: loans, isLoading } = useQuery({
     queryKey: ["loans", "all"],
@@ -46,11 +49,59 @@ function PinjamanPage() {
       const { data, error } = await supabase
         .from("loans")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("start_date", { ascending: false });
       if (error) throw error;
       return data as Loan[];
     },
   });
+
+  const filteredLoans = useMemo(() => {
+    return (loans ?? []).filter((l) => {
+      if (fromDate && l.start_date < fromDate) return false;
+      if (toDate && l.start_date > toDate) return false;
+      if (statusFilter !== "all" && l.status !== statusFilter) return false;
+      return true;
+    });
+  }, [loans, fromDate, toDate, statusFilter]);
+
+  const summaryTotals = useMemo(() => {
+    return filteredLoans.reduce(
+      (acc, l) => {
+        acc.principal += Number(l.principal_amount);
+        acc.outstanding += Number(l.outstanding_principal);
+        return acc;
+      },
+      { principal: 0, outstanding: 0 },
+    );
+  }, [filteredLoans]);
+
+  const setQuickRange = (mode: "thisMonth" | "thisYear" | "lastYear" | "clear") => {
+    const now = new Date();
+    if (mode === "clear") {
+      setFromDate("");
+      setToDate("");
+      return;
+    }
+    if (mode === "thisMonth") {
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, "0");
+      const last = new Date(y, now.getMonth() + 1, 0).getDate();
+      setFromDate(`${y}-${m}-01`);
+      setToDate(`${y}-${m}-${String(last).padStart(2, "0")}`);
+      return;
+    }
+    if (mode === "thisYear") {
+      const y = now.getFullYear();
+      setFromDate(`${y}-01-01`);
+      setToDate(`${y}-12-31`);
+      return;
+    }
+    if (mode === "lastYear") {
+      const y = now.getFullYear() - 1;
+      setFromDate(`${y}-01-01`);
+      setToDate(`${y}-12-31`);
+    }
+  };
 
   const { data: nextDueMap } = useQuery({
     queryKey: ["loans", "next_due_map"],
@@ -75,20 +126,66 @@ function PinjamanPage() {
       
 
       <div className="glass-card rounded-2xl p-4 sm:p-5">
-        <div className="flex items-center gap-2 mb-3 text-sm font-semibold">
-          <ListChecks className="h-4 w-4 text-[var(--neon-cyan)]" />
-          Registry Pinjaman
+        <div className="flex items-center justify-between gap-2 mb-3 text-sm font-semibold">
+          <div className="flex items-center gap-2">
+            <ListChecks className="h-4 w-4 text-[var(--neon-cyan)]" />
+            Registry Pinjaman
+          </div>
+          <div className="text-[11px] font-normal text-muted-foreground">
+            {filteredLoans.length} dari {loans?.length ?? 0} pinjaman
+          </div>
         </div>
+
+        <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 items-end">
+          <div>
+            <label className="block text-[11px] uppercase tracking-wide text-muted-foreground mb-1">Dari Tanggal</label>
+            <input
+              type="date"
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+              className="w-full rounded-lg border border-white/10 bg-background/40 px-2 py-1.5 text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] uppercase tracking-wide text-muted-foreground mb-1">Sampai Tanggal</label>
+            <input
+              type="date"
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+              className="w-full rounded-lg border border-white/10 bg-background/40 px-2 py-1.5 text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] uppercase tracking-wide text-muted-foreground mb-1">Status</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-full rounded-lg border border-white/10 bg-background/40 px-2 py-1.5 text-sm"
+            >
+              <option value="all">Semua</option>
+              <option value="active">Aktif</option>
+              <option value="closed">Lunas</option>
+            </select>
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            <button type="button" onClick={() => setQuickRange("thisMonth")} className="rounded-md border border-white/10 bg-background/40 px-2 py-1 text-[11px] hover:bg-white/5">Bulan ini</button>
+            <button type="button" onClick={() => setQuickRange("thisYear")} className="rounded-md border border-white/10 bg-background/40 px-2 py-1 text-[11px] hover:bg-white/5">Tahun ini</button>
+            <button type="button" onClick={() => setQuickRange("lastYear")} className="rounded-md border border-white/10 bg-background/40 px-2 py-1 text-[11px] hover:bg-white/5">Tahun lalu</button>
+            <button type="button" onClick={() => setQuickRange("clear")} className="rounded-md border border-white/10 bg-background/40 px-2 py-1 text-[11px] hover:bg-white/5">Reset</button>
+          </div>
+        </div>
+
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Memuat…</p>
-        ) : !loans?.length ? (
-          <p className="text-sm text-muted-foreground">Belum ada pinjaman.</p>
+        ) : !filteredLoans.length ? (
+          <p className="text-sm text-muted-foreground">Tidak ada pinjaman pada rentang ini.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="text-[11px] uppercase text-muted-foreground">
                 <tr>
-                  <th className="text-left py-2">Peminjam</th>
+                  <th className="text-left py-2">Tgl Mulai</th>
+                  <th className="text-left">Peminjam</th>
                   <th className="text-right">Pokok</th>
                   <th className="text-right">Outstanding</th>
                   <th className="text-right">Angsuran/bln</th>
@@ -98,13 +195,14 @@ function PinjamanPage() {
                 </tr>
               </thead>
               <tbody>
-                {loans.map((l) => (
+                {filteredLoans.map((l) => (
                   <tr
                     key={l.id}
                     className="border-t border-white/5 hover:bg-white/5 cursor-pointer"
                     onClick={() => setSelected(l)}
                   >
-                    <td className="py-2">{l.borrower_name}</td>
+                    <td className="py-2 text-muted-foreground">{l.start_date}</td>
+                    <td>{l.borrower_name}</td>
                     <td className="text-right font-mono">{formatRp(Number(l.principal_amount))}</td>
                     <td className="text-right font-mono">{formatRp(Number(l.outstanding_principal))}</td>
                     <td className="text-right font-mono">{formatRp(Number(l.monthly_installment))}</td>
@@ -118,6 +216,14 @@ function PinjamanPage() {
                   </tr>
                 ))}
               </tbody>
+              <tfoot>
+                <tr className="border-t border-white/10 text-[11px] uppercase text-muted-foreground">
+                  <td colSpan={2} className="py-2 text-right">Total</td>
+                  <td className="text-right font-mono text-foreground">{formatRp(summaryTotals.principal)}</td>
+                  <td className="text-right font-mono text-foreground">{formatRp(summaryTotals.outstanding)}</td>
+                  <td colSpan={4}></td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         )}
