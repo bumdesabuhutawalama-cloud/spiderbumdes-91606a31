@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { ListChecks, X, ChevronRight } from "lucide-react";
+import { ListChecks, X, ChevronRight, FileDown } from "lucide-react";
 import { PageHeader } from "@/components/DashboardLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { formatRp } from "@/lib/account-balances";
+import { exportElementToPdf, buildReportFilename } from "@/lib/pdf-export";
 
 
 export const Route = createFileRoute("/_app/usp/pinjaman")({
