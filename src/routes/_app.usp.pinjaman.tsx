@@ -43,6 +43,18 @@ function PinjamanPage() {
   const [fromDate, setFromDate] = useState<string>("");
   const [toDate, setToDate] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const reportRef = useRef<HTMLDivElement>(null);
+  const [exporting, setExporting] = useState(false);
+
+  const handleExportPdf = async () => {
+    if (!reportRef.current) return;
+    setExporting(true);
+    try {
+      await exportElementToPdf(reportRef.current, buildReportFilename("data-pinjaman-usp"));
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const { data: loans, isLoading } = useQuery({
     queryKey: ["loans", "all"],
